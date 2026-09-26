@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, Mail, User, ArrowRight } from 'lucide-react';
+import { Lock, Mail, User, ArrowRight } from 'lucide-react';
 import { authApi } from '../services/authApi';
 
 interface RegisterProps {
@@ -49,20 +49,22 @@ export const Register: React.FC<RegisterProps> = ({ onSuccess, onNavigateToLogin
       <div className="neu-card" style={{ maxWidth: '460px', width: '100%', padding: '2.5rem 2rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
           <div style={{
-            width: '52px',
-            height: '52px',
+            width: '56px',
+            height: '56px',
             borderRadius: 'var(--radius-md)',
-            background: 'var(--surface)',
+            background: '#ffffff',
             boxShadow: 'var(--neu-shadow-btn)',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: '1rem',
-            border: '1px solid rgba(255, 255, 255, 0.8)'
+            border: '1px solid rgba(255, 255, 255, 0.8)',
+            overflow: 'hidden',
+            padding: '3px'
           }}>
-            <ShieldCheck size={28} color="var(--primary)" />
+            <img src="/virasat-logo.png" alt="Virasat Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-0.03em' }}>
+          <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-0.03em' }}>
             VIRASAT
           </h2>
           <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', marginTop: '0.15rem' }}>

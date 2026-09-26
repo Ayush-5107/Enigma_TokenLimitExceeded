@@ -169,6 +169,7 @@ function AppContent() {
             message: role === 'owner' ? 'Full estate access enabled' : 'Access restricted to permitted sections'
           });
         }}
+        onOpenLogin={() => setAuthView('login')}
       />
 
       {/* Mobile Top Bar with Menu Button */}
