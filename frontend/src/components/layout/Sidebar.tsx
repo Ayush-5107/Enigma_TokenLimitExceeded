@@ -23,18 +23,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab, userP
   return (
     <aside style={{
       width: '240px',
-      background: 'rgba(15, 23, 42, 0.65)',
-      backdropFilter: 'blur(12px)',
-      borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+      background: 'var(--surface)',
+      borderRight: '1px solid rgba(255, 255, 255, 0.75)',
+      boxShadow: '4px 0 12px rgba(182, 192, 206, 0.25)',
       display: 'flex',
       flexDirection: 'column',
-      padding: '1.25rem 0.75rem',
-      gap: '0.4rem',
-      minHeight: 'calc(100vh - 65px)'
+      padding: '1.25rem 0.85rem',
+      gap: '0.45rem',
+      minHeight: 'calc(100vh - 60px)'
     }}>
-      <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0 0.75rem 0.5rem 0.75rem' }}>
+      <div style={{
+        fontSize: '0.7rem',
+        fontWeight: 700,
+        color: 'var(--text-dim)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.06em',
+        padding: '0 0.5rem 0.35rem 0.5rem',
+        fontFamily: 'var(--font-mono)'
+      }}>
         Navigation
       </div>
+
       {navItems.map((item) => {
         const Icon = item.icon;
         const isAllowed = isOwner || userPermissions[item.section] !== false;
@@ -50,22 +59,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab, userP
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '0.65rem 0.85rem',
-              borderRadius: '10px',
-              border: isActive ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid transparent',
-              background: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
-              color: !isAllowed ? '#475569' : isActive ? '#38bdf8' : '#cbd5e1',
+              borderRadius: 'var(--radius-md)',
+              border: isActive ? '1px solid rgba(0, 102, 102, 0.25)' : '1px solid rgba(255, 255, 255, 0.7)',
+              background: 'var(--surface)',
+              boxShadow: !isAllowed 
+                ? 'none' 
+                : isActive 
+                  ? 'var(--neu-shadow-inset)' 
+                  : 'var(--neu-shadow-btn)',
+              color: !isAllowed 
+                ? 'var(--text-dim)' 
+                : isActive 
+                  ? 'var(--primary)' 
+                  : 'var(--text-main)',
               cursor: isAllowed ? 'pointer' : 'not-allowed',
               textAlign: 'left',
-              fontSize: '0.88rem',
-              fontWeight: isActive ? 600 : 500,
-              transition: 'all 0.15s ease'
+              fontSize: '0.82rem',
+              fontWeight: isActive ? 700 : 500,
+              fontFamily: 'var(--font-primary)',
+              letterSpacing: '-0.01em',
+              transition: 'all 0.15s ease',
+              opacity: !isAllowed ? 0.6 : 1
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Icon size={18} color={!isAllowed ? '#475569' : isActive ? '#38bdf8' : '#94a3b8'} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <Icon size={17} color={!isAllowed ? 'var(--text-dim)' : isActive ? 'var(--primary)' : 'var(--text-muted)'} />
               <span>{item.label}</span>
             </div>
-            {!isAllowed && <Lock size={14} color="#f43f5e" />}
+            {!isAllowed && <Lock size={13} color="var(--danger)" />}
           </button>
         );
       })}

@@ -14,7 +14,7 @@ export const Audit: React.FC = () => {
     try {
       const res = await auditApi.getAuditTrail('estate-case-1');
       setEvents(res);
-    } catch (e) {
+    } catch {
       setEvents([
         {
           id: 'e-1',
@@ -57,59 +57,64 @@ export const Audit: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div>
-        <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <ShieldAlert size={24} color="#38bdf8" />
+        <h2 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <ShieldAlert size={26} color="var(--primary)" />
           <span>Security & Audit Trail Log</span>
         </h2>
-        <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.2rem' }}>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
           Immutable timeline recording sensitive vault access, document uploads, TEE enclave extraction, and permission updates.
         </p>
       </div>
 
-      <div className="glass-card" style={{ padding: '1.25rem' }}>
-        <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f8fafc', marginBottom: '1rem' }}>
+      <div className="neu-card" style={{ padding: '1.5rem' }}>
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
           Audit Event History
         </h3>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {events.map((evt) => (
-            <div key={evt.id} style={{
-              padding: '1rem',
-              borderRadius: '10px',
-              background: 'rgba(255,255,255,0.025)',
-              border: '1px solid rgba(255,255,255,0.06)',
+            <div key={evt.id} className="neu-card-sm" style={{
+              padding: '1.15rem',
               display: 'flex',
               alignItems: 'flex-start',
-              gap: '1rem'
+              gap: '1.25rem'
             }}>
               <div style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '8px',
-                background: evt.action_type === 'TEE_EXTRACT' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(56, 189, 248, 0.15)',
+                width: '42px',
+                height: '42px',
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--surface)',
+                boxShadow: 'var(--neu-shadow-btn)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                flexShrink: 0
               }}>
-                {evt.action_type === 'TEE_EXTRACT' ? <Cpu size={18} color="#10b981" /> : <ShieldCheck size={18} color="#38bdf8" />}
+                {evt.action_type === 'TEE_EXTRACT' ? (
+                  <Cpu size={20} color="var(--success)" />
+                ) : (
+                  <ShieldCheck size={20} color="var(--primary)" />
+                )}
               </div>
 
               <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' }}>
-                  <span className="badge-medium" style={{ padding: '0.15rem 0.5rem', borderRadius: '4px', fontSize: '0.68rem', fontWeight: 700 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <span className="badge-medium" style={{ padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-sm)', fontSize: '0.7rem', fontWeight: 700 }}>
                     {evt.action_type}
                   </span>
-                  <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                     {new Date(evt.timestamp).toLocaleString()}
                   </span>
                 </div>
 
-                <p style={{ fontSize: '0.88rem', color: '#f8fafc', marginTop: '0.2rem' }}>{evt.description}</p>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.3rem', display: 'flex', gap: '1rem' }}>
-                  <span>Actor: <strong style={{ color: '#cbd5e1' }}>{evt.user_name}</strong></span>
-                  {evt.target_resource && <span>Target: <span style={{ fontFamily: 'monospace', color: '#38bdf8' }}>{evt.target_resource}</span></span>}
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', marginTop: '0.25rem' }}>{evt.description}</p>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.45rem', display: 'flex', gap: '1.25rem', flexWrap: 'wrap', fontFamily: 'var(--font-mono)' }}>
+                  <span>Actor: <strong style={{ color: 'var(--text-main)' }}>{evt.user_name}</strong></span>
+                  {evt.target_resource && (
+                    <span>Target: <span style={{ color: 'var(--primary)', fontWeight: 600 }}>{evt.target_resource}</span></span>
+                  )}
                   <span>IP: {evt.ip_address}</span>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PieChart } from 'lucide-react';
+import { PieChart, TrendingUp, AlertTriangle } from 'lucide-react';
 import { estateApi } from '../services/estateApi';
 import type { Asset, Liability } from '../services/estateApi';
 
@@ -18,7 +18,7 @@ export const Estate: React.FC = () => {
       setAssets(a);
       const l = await estateApi.getLiabilities('estate-case-1');
       setLiabilities(l);
-    } catch (e) {
+    } catch {
       setAssets([
         {
           id: 'asset-1',
@@ -91,49 +91,79 @@ export const Estate: React.FC = () => {
   const totalLiabilities = liabilities.reduce((sum, l) => sum + l.total_amount, 0);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <PieChart size={24} color="#38bdf8" />
-            <span>Unified Estate Inventory</span>
-          </h2>
-          <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.2rem' }}>
-            Single source of truth unifying confirmed extracted documents & human-validated financial assets/liabilities.
-          </p>
-        </div>
+      <div>
+        <h2 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <PieChart size={26} color="var(--primary)" />
+          <span>Unified Estate Inventory</span>
+        </h2>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+          Single source of truth unifying confirmed extracted documents & human-validated financial assets/liabilities.
+        </p>
       </div>
 
       {/* Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.25rem' }}>
-        <div className="glass-card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Total Extracted Assets</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#10b981', marginTop: '0.3rem' }}>{formatINR(totalAssets)}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
+        <div className="neu-card" style={{ padding: '1.25rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.78rem', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+            <span>TOTAL EXTRACTED ASSETS</span>
+            <TrendingUp size={18} color="var(--success)" />
+          </div>
+          <div style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--success)', marginTop: '0.5rem', fontFamily: 'var(--font-mono)' }}>
+            {formatINR(totalAssets)}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Verified estate receivables</span>
         </div>
-        <div className="glass-card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Total Liabilities</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f43f5e', marginTop: '0.3rem' }}>{formatINR(totalLiabilities)}</div>
+
+        <div className="neu-card" style={{ padding: '1.25rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.78rem', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+            <span>TOTAL LIABILITIES</span>
+            <AlertTriangle size={18} color="var(--danger)" />
+          </div>
+          <div style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--danger)', marginTop: '0.5rem', fontFamily: 'var(--font-mono)' }}>
+            {formatINR(totalLiabilities)}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Outstanding loans & debt claims</span>
         </div>
-        <div className="glass-card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Net Estate Position</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#38bdf8', marginTop: '0.3rem' }}>{formatINR(totalAssets - totalLiabilities)}</div>
+
+        <div className="neu-card" style={{ padding: '1.25rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.78rem', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+            <span>NET ESTATE POSITION</span>
+            <PieChart size={18} color="var(--primary)" />
+          </div>
+          <div style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--primary)', marginTop: '0.5rem', fontFamily: 'var(--font-mono)' }}>
+            {formatINR(totalAssets - totalLiabilities)}
+          </div>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Net distribution for heirs</span>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.5rem' }}>
+      {/* Neumorphic Segmented Tabs */}
+      <div style={{
+        display: 'inline-flex',
+        alignSelf: 'flex-start',
+        background: 'var(--surface)',
+        boxShadow: 'var(--neu-shadow-inset)',
+        padding: '4px',
+        borderRadius: 'var(--radius-md)',
+        border: '1px solid rgba(255, 255, 255, 0.4)',
+        gap: '4px'
+      }}>
         <button
           onClick={() => setActiveTab('assets')}
           style={{
-            padding: '0.6rem 1.2rem',
-            borderRadius: '8px',
+            padding: '0.6rem 1.25rem',
+            borderRadius: 'var(--radius-sm)',
             border: 'none',
-            background: activeTab === 'assets' ? '#38bdf8' : 'transparent',
-            color: activeTab === 'assets' ? '#090d16' : '#94a3b8',
+            background: activeTab === 'assets' ? 'var(--primary)' : 'transparent',
+            color: activeTab === 'assets' ? '#ffffff' : 'var(--text-muted)',
+            boxShadow: activeTab === 'assets' ? '2px 2px 6px rgba(0, 102, 102, 0.35)' : 'none',
             fontWeight: 700,
-            fontSize: '0.88rem',
-            cursor: 'pointer'
+            fontSize: '0.82rem',
+            fontFamily: 'var(--font-mono)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease'
           }}
         >
           Assets & Receivables ({assets.length})
@@ -142,14 +172,17 @@ export const Estate: React.FC = () => {
         <button
           onClick={() => setActiveTab('liabilities')}
           style={{
-            padding: '0.6rem 1.2rem',
-            borderRadius: '8px',
+            padding: '0.6rem 1.25rem',
+            borderRadius: 'var(--radius-sm)',
             border: 'none',
-            background: activeTab === 'liabilities' ? '#f43f5e' : 'transparent',
-            color: activeTab === 'liabilities' ? '#ffffff' : '#94a3b8',
+            background: activeTab === 'liabilities' ? 'var(--danger)' : 'transparent',
+            color: activeTab === 'liabilities' ? '#ffffff' : 'var(--text-muted)',
+            boxShadow: activeTab === 'liabilities' ? '2px 2px 6px rgba(255, 33, 87, 0.35)' : 'none',
             fontWeight: 700,
-            fontSize: '0.88rem',
-            cursor: 'pointer'
+            fontSize: '0.82rem',
+            fontFamily: 'var(--font-mono)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease'
           }}
         >
           Liabilities & Loans ({liabilities.length})
@@ -158,35 +191,35 @@ export const Estate: React.FC = () => {
 
       {/* Assets Tab */}
       {activeTab === 'assets' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
           {assets.map((asset) => (
-            <div key={asset.id} className="glass-card" style={{ padding: '1.25rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                <span className="badge-medium" style={{ padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase' }}>
+            <div key={asset.id} className="neu-card" style={{ padding: '1.35rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.85rem' }}>
+                <span className="badge-medium" style={{ padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-sm)', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase' }}>
                   {asset.category}
                 </span>
 
                 {asset.is_confirmed ? (
-                  <span className="badge-medium" style={{ padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.68rem', color: '#6ee7b7', borderColor: '#10b981' }}>
+                  <span className="badge-medium" style={{ padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-sm)', fontSize: '0.68rem', fontWeight: 700, color: 'var(--success)', borderColor: 'var(--success)' }}>
                     ✓ CONFIRMED
                   </span>
                 ) : (
-                  <span className="badge-high" style={{ padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.68rem' }}>
+                  <span className="badge-high" style={{ padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-sm)', fontSize: '0.68rem', fontWeight: 700 }}>
                     ⚠️ UNCONFIRMED
                   </span>
                 )}
               </div>
 
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f8fafc' }}>{asset.name}</h3>
-              <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '0.2rem' }}>Institution: {asset.institution || 'N/A'}</p>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>{asset.name}</h3>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Institution: {asset.institution || 'N/A'}</p>
 
-              <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#10b981', margin: '0.75rem 0 0.5rem 0' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--success)', margin: '0.85rem 0 0.5rem 0', fontFamily: 'var(--font-mono)' }}>
                 {formatINR(asset.estimated_value)}
               </div>
 
               {asset.account_number_masked && (
-                <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
-                  Ref / Account: <span style={{ fontFamily: 'monospace', color: '#cbd5e1' }}>{asset.account_number_masked}</span>
+                <div className="neu-inset" style={{ padding: '0.45rem 0.75rem', fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                  Ref / Account: <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{asset.account_number_masked}</span>
                 </div>
               )}
             </div>
@@ -196,35 +229,35 @@ export const Estate: React.FC = () => {
 
       {/* Liabilities Tab */}
       {activeTab === 'liabilities' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
           {liabilities.map((liab) => (
-            <div key={liab.id} className="glass-card" style={{ padding: '1.25rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                <span className="badge-critical" style={{ padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase' }}>
+            <div key={liab.id} className="neu-card" style={{ padding: '1.35rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.85rem' }}>
+                <span className="badge-critical" style={{ padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-sm)', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase' }}>
                   {liab.category}
                 </span>
 
-                <span className="badge-medium" style={{ padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.68rem', color: '#6ee7b7', borderColor: '#10b981' }}>
+                <span className="badge-medium" style={{ padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-sm)', fontSize: '0.68rem', fontWeight: 700, color: 'var(--success)', borderColor: 'var(--success)' }}>
                   ✓ CONFIRMED
                 </span>
               </div>
 
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f8fafc' }}>{liab.name}</h3>
-              <p style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '0.2rem' }}>Creditor: {liab.creditor || 'N/A'}</p>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>{liab.name}</h3>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Creditor: {liab.creditor || 'N/A'}</p>
 
-              <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#f43f5e', margin: '0.75rem 0 0.2rem 0' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--danger)', margin: '0.85rem 0 0.35rem 0', fontFamily: 'var(--font-mono)' }}>
                 {formatINR(liab.total_amount)}
               </div>
 
               {liab.emi_amount > 0 && (
-                <div style={{ fontSize: '0.82rem', color: '#f59e0b', fontWeight: 600, marginBottom: '0.5rem' }}>
+                <div className="neu-inset" style={{ padding: '0.45rem 0.75rem', fontSize: '0.82rem', color: '#b26500', fontWeight: 700, fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
                   Ongoing EMI: {formatINR(liab.emi_amount)} / month
                 </div>
               )}
 
               {liab.due_date && (
-                <div style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
-                  Next EMI Due: <strong style={{ color: '#f43f5e' }}>{liab.due_date}</strong>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                  Next EMI Due: <strong style={{ color: 'var(--danger)' }}>{liab.due_date}</strong>
                 </div>
               )}
             </div>

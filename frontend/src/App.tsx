@@ -9,10 +9,13 @@ import { Actions } from './pages/Actions';
 import { Family } from './pages/Family';
 import { Audit } from './pages/Audit';
 import { Settings } from './pages/Settings';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState('home');
   const [userRole, setUserRole] = useState<'owner' | 'family'>('owner');
+  const [authView, setAuthView] = useState<'none' | 'login' | 'register'>('none');
 
   const currentUser = userRole === 'owner' 
     ? { full_name: 'Rajesh Sharma', role: 'owner', email: 'owner@estate.demo' }
@@ -21,6 +24,38 @@ export function App() {
   const userPermissions = userRole === 'owner'
     ? { vault: true, documents: true, estate: true, actions: true, audit: true }
     : { vault: false, documents: true, estate: true, actions: true, audit: false };
+
+  const handleAuthSuccess = (user: any) => {
+    if (user.role === 'owner') {
+      setUserRole('owner');
+    } else {
+      setUserRole('family');
+    }
+    setAuthView('none');
+    setCurrentTab('home');
+  };
+
+  if (authView === 'login') {
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--surface)', padding: '2rem' }}>
+        <Login
+          onSuccess={handleAuthSuccess}
+          onNavigateToRegister={() => setAuthView('register')}
+        />
+      </div>
+    );
+  }
+
+  if (authView === 'register') {
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--surface)', padding: '2rem' }}>
+        <Register
+          onSuccess={handleAuthSuccess}
+          onNavigateToLogin={() => setAuthView('login')}
+        />
+      </div>
+    );
+  }
 
   const renderContent = () => {
     switch (currentTab) {
@@ -46,7 +81,7 @@ export function App() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--surface)' }}>
       <Navbar
         currentUser={currentUser}
         onSwitchUserRole={setUserRole}
@@ -60,7 +95,7 @@ export function App() {
           isOwner={userRole === 'owner'}
         />
 
-        <main style={{ flex: 1, padding: '1.5rem 2rem', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+        <main style={{ flex: 1, padding: '1.75rem 2.25rem', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
           {renderContent()}
         </main>
       </div>

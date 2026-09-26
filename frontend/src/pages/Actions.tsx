@@ -21,7 +21,7 @@ export const Actions: React.FC = () => {
       setActions(acts);
       const mems = await familyApi.getMembers('estate-case-1');
       setMembers(mems);
-    } catch (e) {
+    } catch {
       setActions([
         {
           id: 'act-1',
@@ -126,7 +126,7 @@ export const Actions: React.FC = () => {
     try {
       await actionApi.assignAction(actionId, memberId);
       loadData();
-    } catch (e) {
+    } catch {
       const mem = members.find(m => m.id === memberId);
       setActions(actions.map(a => a.id === actionId ? { ...a, assigned_member_id: memberId, assigned_member_name: mem?.name } : a));
     }
@@ -138,70 +138,70 @@ export const Actions: React.FC = () => {
       setEvidenceNote('');
       setSelectedAction(null);
       loadData();
-    } catch (e) {
+    } catch {
       setActions(actions.map(a => a.id === actionId ? { ...a, status: newStatus as any } : a));
       setSelectedAction(null);
     }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* Header */}
       <div>
-        <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <CheckSquare size={24} color="#38bdf8" />
+        <h2 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <CheckSquare size={26} color="var(--primary)" />
           <span>Action Engine & Explainable Priority Matrix</span>
         </h2>
-        <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.2rem' }}>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
           Prioritized closure checklists automatically generated from confirmed financial assets & liabilities with explainable scoring.
         </p>
       </div>
 
       {/* Action Items List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
         {actions.map((act) => (
-          <div key={act.id} className="glass-card" style={{ padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ maxWidth: '70%' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
-                  <span className={`badge-${act.priority}`} style={{ padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase' }}>
+          <div key={act.id} className="neu-card" style={{ padding: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1.5rem' }}>
+              <div style={{ flex: '1 1 500px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+                  <span className={`badge-${act.priority}`} style={{ padding: '0.2rem 0.65rem', borderRadius: 'var(--radius-sm)', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase' }}>
                     {act.priority} Priority (Score: {act.urgency_score}/100)
                   </span>
-                  <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>Due: <strong style={{ color: '#f8fafc' }}>{act.due_date}</strong></span>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                    Due: <strong style={{ color: 'var(--text-main)' }}>{act.due_date}</strong>
+                  </span>
                 </div>
 
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f8fafc' }}>{act.title}</h3>
-                <p style={{ fontSize: '0.88rem', color: '#cbd5e1', marginTop: '0.3rem' }}>{act.description}</p>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)' }}>{act.title}</h3>
+                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>{act.description}</p>
 
-                {/* Priority Rationale Box */}
-                <div style={{
-                  marginTop: '0.75rem',
-                  padding: '0.65rem 0.85rem',
-                  borderRadius: '8px',
-                  background: 'rgba(56, 189, 248, 0.08)',
-                  border: '1px solid rgba(56, 189, 248, 0.2)',
-                  fontSize: '0.8rem',
-                  color: '#94a3b8'
+                {/* Priority Rationale Box (Neumorphic Inset Well) */}
+                <div className="neu-inset" style={{
+                  marginTop: '0.85rem',
+                  padding: '0.75rem 1rem',
+                  fontSize: '0.82rem',
+                  color: 'var(--text-main)'
                 }}>
-                  <strong style={{ color: '#38bdf8' }}>Explainable Rationale:</strong> {act.priority_reason}
+                  <strong style={{ color: 'var(--primary)', fontFamily: 'var(--font-mono)' }}>EXPLAINABLE RATIONALE: </strong>
+                  {act.priority_reason}
                 </div>
 
                 {/* Checklist Steps & Documents */}
-                <div style={{ marginTop: '0.85rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ marginTop: '1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
                   <div>
-                    <h4 style={{ fontSize: '0.78rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Action Steps</h4>
-                    <ul style={{ paddingLeft: '1.1rem', fontSize: '0.8rem', color: '#cbd5e1' }}>
+                    <h4 style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.4rem', fontFamily: 'var(--font-mono)' }}>Action Steps</h4>
+                    <ul style={{ paddingLeft: '1.1rem', fontSize: '0.82rem', color: 'var(--text-main)' }}>
                       {act.checklist_steps_json?.map((step, idx) => (
-                        <li key={idx} style={{ marginBottom: '0.2rem' }}>{step}</li>
+                        <li key={idx} style={{ marginBottom: '0.3rem' }}>{step}</li>
                       ))}
                     </ul>
                   </div>
 
                   <div>
-                    <h4 style={{ fontSize: '0.78rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Required Documents</h4>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
+                    <h4 style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.4rem', fontFamily: 'var(--font-mono)' }}>Required Documents</h4>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                       {act.required_documents_json?.map((docName, idx) => (
-                        <span key={idx} style={{ padding: '0.15rem 0.5rem', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', fontSize: '0.72rem', color: '#cbd5e1' }}>
+                        <span key={idx} className="neu-card-sm" style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem', color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>
                           📄 {docName}
                         </span>
                       ))}
@@ -211,18 +211,18 @@ export const Actions: React.FC = () => {
               </div>
 
               {/* Assignment & Status Controls */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', minWidth: '220px', alignItems: 'flex-end' }}>
-                <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
-                  Status: <strong style={{ color: act.status === 'completed' ? '#10b981' : '#f59e0b', textTransform: 'uppercase' }}>{act.status}</strong>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', minWidth: '220px', flex: '0 0 240px' }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                  STATUS: <strong style={{ color: act.status === 'completed' ? 'var(--success)' : 'var(--warning)', textTransform: 'uppercase' }}>{act.status}</strong>
                 </div>
 
                 {/* Family Member Assignment Dropdown */}
                 <div style={{ width: '100%' }}>
-                  <label style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', marginBottom: '0.2rem' }}>Assigned To:</label>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem', fontFamily: 'var(--font-mono)' }}>Assigned To:</label>
                   <select
                     value={act.assigned_member_id || ''}
                     onChange={(e) => handleAssign(act.id, e.target.value)}
-                    style={{ width: '100%', padding: '0.45rem', borderRadius: '6px', background: '#090d16', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontSize: '0.8rem' }}
+                    style={{ width: '100%' }}
                   >
                     <option value="">-- Assign Member --</option>
                     {members.map(m => (
@@ -233,17 +233,8 @@ export const Actions: React.FC = () => {
 
                 <button
                   onClick={() => setSelectedAction(act)}
-                  style={{
-                    width: '100%',
-                    padding: '0.55rem',
-                    borderRadius: '6px',
-                    border: '1px solid rgba(56, 189, 248, 0.3)',
-                    background: 'rgba(56, 189, 248, 0.12)',
-                    color: '#38bdf8',
-                    fontSize: '0.8rem',
-                    fontWeight: 600,
-                    cursor: 'pointer'
-                  }}
+                  className="neu-btn"
+                  style={{ color: 'var(--primary)', width: '100%' }}
                 >
                   Update Task & Evidence
                 </button>
@@ -256,24 +247,26 @@ export const Actions: React.FC = () => {
       {/* Task Update Modal */}
       {selectedAction && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ maxWidth: '500px', padding: '1.5rem' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f8fafc', marginBottom: '0.75rem' }}>
+          <div className="modal-content" style={{ maxWidth: '520px', padding: '1.75rem' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.85rem' }}>
               Update Task Status: {selectedAction.title}
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', marginBottom: '0.3rem' }}>Select New Status</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.4rem', fontFamily: 'var(--font-mono)' }}>Select New Status</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                   <button
                     onClick={() => handleUpdateStatus(selectedAction.id, 'in_progress')}
-                    style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid rgba(245, 158, 11, 0.4)', background: 'rgba(245, 158, 11, 0.15)', color: '#fcd34d', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    className="neu-btn"
+                    style={{ color: '#b26500', fontWeight: 700 }}
                   >
                     In Progress
                   </button>
                   <button
                     onClick={() => handleUpdateStatus(selectedAction.id, 'completed')}
-                    style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.4)', background: 'rgba(16, 185, 129, 0.15)', color: '#6ee7b7', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    className="neu-btn"
+                    style={{ color: 'var(--success)', fontWeight: 700 }}
                   >
                     Mark Completed
                   </button>
@@ -281,20 +274,20 @@ export const Actions: React.FC = () => {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', marginBottom: '0.3rem' }}>Upload Evidence Note / Ref</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.3rem', fontFamily: 'var(--font-mono)' }}>Upload Evidence Note / Ref</label>
                 <textarea
                   rows={3}
                   placeholder="e.g. Submitted claim reference #LIC-99214 to branch manager..."
                   value={evidenceNote}
                   onChange={(e) => setEvidenceNote(e.target.value)}
-                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', background: '#090d16', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontSize: '0.82rem' }}
+                  style={{ width: '100%' }}
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.65rem' }}>
                 <button
                   onClick={() => setSelectedAction(null)}
-                  style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: '#cbd5e1', cursor: 'pointer' }}
+                  className="neu-btn"
                 >
                   Close
                 </button>

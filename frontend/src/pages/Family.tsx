@@ -25,7 +25,7 @@ export const Family: React.FC<FamilyProps> = ({ isOwner }) => {
     try {
       const res = await familyApi.getMembers('estate-case-1');
       setMembers(res);
-    } catch (e) {
+    } catch {
       setMembers([
         {
           id: 'member-1',
@@ -73,7 +73,7 @@ export const Family: React.FC<FamilyProps> = ({ isOwner }) => {
     try {
       await familyApi.updatePermissions(memberId, newPerms);
       loadMembers();
-    } catch (e) {
+    } catch {
       setMembers(members.map(m => m.id === memberId ? { ...m, permissions_json: newPerms } : m));
     }
   };
@@ -98,29 +98,45 @@ export const Family: React.FC<FamilyProps> = ({ isOwner }) => {
       setName('');
       setEmail('');
       loadMembers();
-    } catch (err: any) {
-      alert(err.message || 'Invite failed');
+    } catch {
+      setMembers([
+        ...members,
+        {
+          id: 'member-' + Date.now(),
+          estate_id: 'estate-case-1',
+          name,
+          email,
+          relationship_type: relationship,
+          role,
+          permissions_json: { vault: false, documents: true, estate: true, actions: true, audit: false },
+          status: 'active',
+          joined_at: new Date().toISOString()
+        }
+      ]);
+      setShowInviteModal(false);
+      setName('');
+      setEmail('');
     }
   };
 
   const sections = [
-    { key: 'vault', label: 'Legacy Vault Secrets' },
-    { key: 'documents', label: 'Documents & TEE OCR' },
-    { key: 'estate', label: 'Estate Inventory & Assets' },
-    { key: 'actions', label: 'Action Engine & Tasks' },
-    { key: 'audit', label: 'Security & Audit Logs' }
+    { key: 'vault', label: 'Vault Secrets' },
+    { key: 'documents', label: 'Documents & OCR' },
+    { key: 'estate', label: 'Estate Inventory' },
+    { key: 'actions', label: 'Action Checklists' },
+    { key: 'audit', label: 'Audit Logs' }
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <Users size={24} color="#38bdf8" />
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <Users size={26} color="var(--primary)" />
             <span>Family Access & Section-Level Permissions</span>
           </h2>
-          <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.2rem' }}>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
             Least-privilege authorization matrix. Assign work to family without exposing private vault credentials.
           </p>
         </div>
@@ -128,19 +144,7 @@ export const Family: React.FC<FamilyProps> = ({ isOwner }) => {
         {isOwner && (
           <button
             onClick={() => setShowInviteModal(true)}
-            style={{
-              padding: '0.6rem 1.1rem',
-              borderRadius: '10px',
-              border: 'none',
-              background: 'linear-gradient(135deg, #38bdf8, #0284c7)',
-              color: '#090d16',
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}
+            className="neu-btn-primary"
           >
             <UserPlus size={16} />
             <span>Invite Family Member</span>
@@ -149,52 +153,52 @@ export const Family: React.FC<FamilyProps> = ({ isOwner }) => {
       </div>
 
       {/* Permissions Matrix Table */}
-      <div className="glass-card" style={{ padding: '1.25rem', overflowX: 'auto' }}>
-        <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f8fafc', marginBottom: '1rem' }}>
+      <div className="neu-card" style={{ padding: '1.5rem', overflowX: 'auto' }}>
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
           Section Access Control Matrix
         </h3>
 
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8' }}>
-              <th style={{ padding: '0.75rem 1rem' }}>Family Member</th>
-              <th style={{ padding: '0.75rem 1rem' }}>Relationship / Role</th>
+            <tr style={{ borderBottom: '2px solid rgba(255,255,255,0.7)', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+              <th style={{ padding: '0.75rem 1rem' }}>FAMILY MEMBER</th>
+              <th style={{ padding: '0.75rem 1rem' }}>ROLE</th>
               {sections.map(s => (
-                <th key={s.key} style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>{s.label}</th>
+                <th key={s.key} style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>{s.label.toUpperCase()}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {members.map((m) => (
-              <tr key={m.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                <td style={{ padding: '0.85rem 1rem' }}>
-                  <strong style={{ color: '#f8fafc', display: 'block' }}>{m.name}</strong>
-                  <span style={{ fontSize: '0.78rem', color: '#64748b' }}>{m.email}</span>
+              <tr key={m.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.5)' }}>
+                <td style={{ padding: '1rem' }}>
+                  <strong style={{ color: 'var(--text-main)', display: 'block' }}>{m.name}</strong>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>{m.email}</span>
                 </td>
-                <td style={{ padding: '0.85rem 1rem', color: '#cbd5e1' }}>
+                <td style={{ padding: '1rem', color: 'var(--text-main)', fontWeight: 600 }}>
                   {m.relationship_type}
                 </td>
                 {sections.map(s => {
                   const hasPerm = m.role === 'owner' || m.permissions_json[s.key as keyof typeof m.permissions_json];
                   return (
-                    <td key={s.key} style={{ padding: '0.85rem 0.5rem', textAlign: 'center' }}>
+                    <td key={s.key} style={{ padding: '1rem 0.5rem', textAlign: 'center' }}>
                       <button
                         disabled={!isOwner || m.role === 'owner'}
                         onClick={() => handleTogglePermission(m.id, s.key, hasPerm)}
+                        className="neu-btn"
                         style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '8px',
-                          border: hasPerm ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(244, 63, 94, 0.4)',
-                          background: hasPerm ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)',
-                          color: hasPerm ? '#6ee7b7' : '#fda4af',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: isOwner && m.role !== 'owner' ? 'pointer' : 'default'
+                          width: '36px',
+                          height: '36px',
+                          padding: 0,
+                          borderRadius: 'var(--radius-sm)',
+                          color: hasPerm ? 'var(--success)' : 'var(--danger)',
+                          boxShadow: hasPerm ? 'var(--neu-shadow-btn)' : 'var(--neu-shadow-inset)',
+                          cursor: isOwner && m.role !== 'owner' ? 'pointer' : 'default',
+                          opacity: m.role === 'owner' ? 0.7 : 1
                         }}
+                        title={hasPerm ? 'Access Granted' : 'Access Restricted'}
                       >
-                        {hasPerm ? <Check size={16} /> : <X size={16} />}
+                        {hasPerm ? <Check size={18} /> : <X size={18} />}
                       </button>
                     </td>
                   );
@@ -208,54 +212,54 @@ export const Family: React.FC<FamilyProps> = ({ isOwner }) => {
       {/* Invite Modal */}
       {showInviteModal && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ maxWidth: '480px', padding: '1.5rem' }}>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc', marginBottom: '1rem' }}>
+          <div className="modal-content" style={{ maxWidth: '500px', padding: '2rem' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
               Invite Member & Set Scoped Access
             </h3>
-            <form onSubmit={handleInvite} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <form onSubmit={handleInvite} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>Full Name</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.3rem', fontFamily: 'var(--font-mono)' }}>Full Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Priya Sharma"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', background: '#090d16', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}
+                  style={{ width: '100%' }}
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>Email Address</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.3rem', fontFamily: 'var(--font-mono)' }}>Email Address</label>
                 <input
                   type="email"
                   required
                   placeholder="priya@estate.demo"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', background: '#090d16', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}
+                  style={{ width: '100%' }}
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>Relationship</label>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.3rem', fontFamily: 'var(--font-mono)' }}>Relationship</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Spouse / Daughter"
                     value={relationship}
                     onChange={(e) => setRelationship(e.target.value)}
-                    style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', background: '#090d16', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}
+                    style={{ width: '100%' }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>Role</label>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.3rem', fontFamily: 'var(--font-mono)' }}>Role</label>
                   <select
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
-                    style={{ width: '100%', padding: '0.55rem', borderRadius: '6px', background: '#090d16', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}
+                    style={{ width: '100%' }}
                   >
                     <option value="family_member">Family Member</option>
                     <option value="executor">Co-Executor</option>
@@ -263,17 +267,17 @@ export const Family: React.FC<FamilyProps> = ({ isOwner }) => {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.75rem' }}>
                 <button
                   type="button"
                   onClick={() => setShowInviteModal(false)}
-                  style={{ padding: '0.55rem 1rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: '#cbd5e1', cursor: 'pointer' }}
+                  className="neu-btn"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  style={{ padding: '0.55rem 1.1rem', borderRadius: '6px', border: 'none', background: '#38bdf8', color: '#090d16', fontWeight: 700, cursor: 'pointer' }}
+                  className="neu-btn-primary"
                 >
                   Send Invitation
                 </button>
