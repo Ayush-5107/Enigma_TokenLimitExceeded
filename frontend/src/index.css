@@ -352,11 +352,16 @@ h1, h2, h3, h4, h5, h6 {
   background: #94a3b8;
 }
 
-/* Mobile & Tablet Responsiveness */
+/* Responsive Media Queries */
 @media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  
   .mobile-nav-bar {
     display: flex !important;
   }
+  
   .sidebar-container {
     position: fixed;
     top: 105px;
@@ -367,10 +372,21 @@ h1, h2, h3, h4, h5, h6 {
     transition: transform 0.25s ease;
     box-shadow: 8px 0 20px rgba(0,0,0,0.15);
   }
+  
   .sidebar-container.mobile-open {
     transform: translateX(0);
   }
+  
   main {
+    padding: 1rem !important;
+  }
+
+  .neu-card, .glass-card {
+    padding: 1rem !important;
+  }
+
+  .modal-content {
+    max-width: 95vw !important;
     padding: 1rem !important;
   }
 }

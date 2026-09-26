@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Footer } from './components/layout/Footer';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { Home } from './pages/Home';
@@ -11,6 +12,7 @@ import { Audit } from './pages/Audit';
 import { Settings } from './pages/Settings';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
+import { LandingPage } from './pages/LandingPage';
 import { ToastContainer } from './components/Toast';
 import type { ToastData } from './components/Toast';
 import { EstateProvider, useEstate } from './context/EstateContext';
@@ -19,7 +21,7 @@ import { ShieldAlert, Menu, X } from 'lucide-react';
 function AppContent() {
   const [currentTab, setCurrentTab] = useState('home');
   const [userRole, setUserRole] = useState<'owner' | 'family'>('owner');
-  const [authView, setAuthView] = useState<'none' | 'login' | 'register'>('none');
+  const [authView, setAuthView] = useState<'none' | 'login' | 'register' | 'landing'>('landing');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastData[]>([]);
 
@@ -60,6 +62,10 @@ function AppContent() {
     setCurrentTab(tab);
     setMobileMenuOpen(false);
   };
+
+  if (authView === 'landing') {
+    return <LandingPage onEnterApp={() => setAuthView('none')} />;
+  }
 
   if (authView === 'login') {
     return (
@@ -218,6 +224,8 @@ function AppContent() {
 
       {/* Global Toast Notification Layer */}
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+
+      <Footer />
     </div>
   );
 }

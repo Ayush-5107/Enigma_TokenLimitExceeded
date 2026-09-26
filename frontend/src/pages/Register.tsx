@@ -26,8 +26,10 @@ export const Register: React.FC<RegisterProps> = ({ onSuccess, onNavigateToLogin
         password,
         role
       });
+      localStorage.setItem('estate_token', 'token_' + Date.now());
       onSuccess(user);
     } catch {
+      localStorage.setItem('estate_token', 'demo_token_' + Date.now());
       onSuccess({
         full_name: fullName || 'Rajesh Sharma',
         email,

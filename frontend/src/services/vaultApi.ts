@@ -34,6 +34,20 @@ export const vaultApi = {
     });
   },
 
+  async updateEntry(id: string, data: {
+    title?: string;
+    category?: string;
+    content?: string;
+    institution?: string;
+    access_level?: string;
+    deadman_trigger_days?: number;
+  }): Promise<VaultEntry> {
+    return apiFetch(`/vault/entries/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
   async deleteEntry(id: string): Promise<any> {
     return apiFetch(`/vault/entries/${id}`, {
       method: 'DELETE',

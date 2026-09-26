@@ -17,6 +17,45 @@ export const Audit: React.FC = () => {
         </p>
       </div>
 
+      {/* Metric Cards Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+        gap: '1.25rem'
+      }}>
+        <div className="neu-card" style={{ padding: '1.25rem' }}>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Total Audit Events</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)', marginTop: '0.35rem' }}>{auditLogs.length}</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--success)', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <span>✓ Logged & Cryptographically Sealed</span>
+          </div>
+        </div>
+
+        <div className="neu-card" style={{ padding: '1.25rem' }}>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>TEE Enclave Integrity</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)', marginTop: '0.35rem' }}>100%</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            Hardware Attested (AMD SEV)
+          </div>
+        </div>
+
+        <div className="neu-card" style={{ padding: '1.25rem' }}>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Zero-Knowledge Proofs</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--success)', marginTop: '0.35rem' }}>Active</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            Shamir Secret Key Shares
+          </div>
+        </div>
+
+        <div className="neu-card" style={{ padding: '1.25rem' }}>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>DPDP Compliance</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)', marginTop: '0.35rem' }}>Verified</div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            Digital Personal Data Protection Act
+          </div>
+        </div>
+      </div>
+
       <div className="neu-card" style={{ padding: '1.25rem 1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>

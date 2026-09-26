@@ -1,17 +1,36 @@
 {
-  "short_name": "Virasat",
-  "name": "Virasat — Digital Estate & Financial Closure Assistant",
+  "short_name": "VIRASAT",
+  "name": "VIRASAT — Digital Estate & Financial Closure Assistant",
   "description": "Privacy-first digital estate vault and financial closure assistant for families. Don't leave your family a scavenger hunt.",
   "icons": [
     {
       "src": "/logo.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
-  "background_color": "#090d16",
-  "theme_color": "#38bdf8",
+  "background_color": "#F0F2F6",
+  "theme_color": "#006666",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "shortcuts": [
+    {
+      "name": "Open Vault",
+      "url": "/?tab=vault",
+      "description": "Access your secure document vault"
+    },
+    {
+      "name": "View Estate",
+      "url": "/?tab=estate",
+      "description": "View unified estate inventory"
+    }
+  ]
 }

@@ -19,9 +19,13 @@ export const Login: React.FC<LoginProps> = ({ onSuccess, onNavigateToRegister })
     setError('');
     try {
       const res = await authApi.login({ email, password });
+      if (res.access_token) {
+        localStorage.setItem('estate_token', res.access_token);
+      }
       onSuccess(res.user);
     } catch {
       // Demo fallback authentication
+      localStorage.setItem('estate_token', 'demo_owner_token');
       onSuccess({
         full_name: email.includes('owner') ? 'Rajesh Sharma' : 'Rahul Sharma (Son)',
         role: email.includes('owner') ? 'owner' : 'family_member',
