@@ -1,12 +1,12 @@
 {
-  "short_name": "Digital Estate",
-  "name": "Digital Estate & Financial Closure Assistant",
-  "description": "Privacy-first digital estate vault and financial closure assistant for families.",
+  "short_name": "Virasat",
+  "name": "Virasat — Digital Estate & Financial Closure Assistant",
+  "description": "Privacy-first digital estate vault and financial closure assistant for families. Don't leave your family a scavenger hunt.",
   "icons": [
     {
-      "src": "/vite.svg",
-      "type": "image/svg+xml",
-      "sizes": "192x192 512x512"
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": "/",

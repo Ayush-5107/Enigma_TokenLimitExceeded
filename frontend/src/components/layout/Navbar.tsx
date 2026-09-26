@@ -4,9 +4,10 @@ import { ShieldCheck, User, Cpu } from 'lucide-react';
 interface NavbarProps {
   currentUser: { full_name: string; role: string; email: string };
   onSwitchUserRole: (role: 'owner' | 'family') => void;
+  onOpenLogin: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentUser, onSwitchUserRole }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentUser, onSwitchUserRole, onOpenLogin }) => {
   return (
     <header style={{
       background: 'var(--surface)',
@@ -23,21 +24,23 @@ export const Navbar: React.FC<NavbarProps> = ({ currentUser, onSwitchUserRole })
       {/* Brand & Project Name VIRASAT */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
         <div style={{
-          width: '40px',
-          height: '40px',
+          width: '42px',
+          height: '42px',
           borderRadius: 'var(--radius-md)',
-          background: 'var(--surface)',
+          background: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           boxShadow: 'var(--neu-shadow-btn)',
-          border: '1px solid rgba(255, 255, 255, 0.9)'
+          border: '1px solid rgba(255, 255, 255, 0.9)',
+          overflow: 'hidden',
+          padding: '2px'
         }}>
-          <ShieldCheck size={22} color="var(--primary)" />
+          <img src="/virasat-logo.png" alt="Virasat Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
         </div>
         <div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+            <h1 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
               VIRASAT
             </h1>
             <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', opacity: 0.85 }}>
@@ -66,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentUser, onSwitchUserRole })
           <span>TEE Enclave: Active (SGX Attested)</span>
         </div>
 
-        {/* Demo Switch User Role Segmented Control (Neumorphic Inset Tray) */}
+        {/* Demo Switch User Role Segmented Control */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -112,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentUser, onSwitchUserRole })
           </button>
         </div>
 
-        {/* Profile Pill */}
+        {/* Profile Pill & Auth Screen Trigger */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -127,6 +130,23 @@ export const Navbar: React.FC<NavbarProps> = ({ currentUser, onSwitchUserRole })
           <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
             {currentUser?.full_name || 'Rajesh Sharma'}
           </span>
+          <button
+            onClick={onOpenLogin}
+            title="Switch to Login / Register Screen"
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--primary)',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              marginLeft: '0.4rem',
+              paddingLeft: '0.4rem',
+              borderLeft: '1px solid rgba(0,0,0,0.1)'
+            }}
+          >
+            Sign Out
+          </button>
         </div>
       </div>
     </header>

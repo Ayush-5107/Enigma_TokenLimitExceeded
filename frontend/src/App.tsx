@@ -85,6 +85,7 @@ export function App() {
       <Navbar
         currentUser={currentUser}
         onSwitchUserRole={setUserRole}
+        onOpenLogin={() => setAuthView('login')}
       />
 
       <div style={{ display: 'flex', flex: 1 }}>
