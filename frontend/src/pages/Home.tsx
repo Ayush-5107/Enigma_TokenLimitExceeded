@@ -1,223 +1,218 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { PieChart, TrendingUp, AlertTriangle, CheckCircle, ArrowRight, FileText } from 'lucide-react';
-import { estateApi } from '../services/estateApi';
-import type { EstateSummary } from '../services/estateApi';
-import { actionApi } from '../services/actionApi';
-import type { ActionItem } from '../services/actionApi';
+import { useEstate } from '../context/EstateContext';
 
 interface HomeProps {
   onNavigate: (tab: string) => void;
 }
 
 export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
-  const [summary, setSummary] = useState<EstateSummary | null>(null);
-  const [urgentActions, setUrgentActions] = useState<ActionItem[]>([]);
+  const {
+    totalAssetValue,
+    totalLiabilityValue,
+    netEstateValue,
+    unconfirmedCount,
+    closureProgressPercent,
+    actions
+  } = useEstate();
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      const sum = await estateApi.getSummary('estate-case-1');
-      setSummary(sum);
-      const actions = await actionApi.getActions('estate-case-1');
-      setUrgentActions(actions.filter(a => a.priority === 'critical' || a.priority === 'high'));
-    } catch (e) {
-      setSummary({
-        estate_id: 'estate-case-1',
-        title: 'Late Suresh Sharma Estate Closure',
-        deceased_name: 'Suresh Sharma',
-        total_asset_value: 18345200.50,
-        total_liability_value: 4250000.00,
-        net_estate_value: 14095200.50,
-        unconfirmed_items_count: 1,
-        pending_actions_count: 3,
-        completed_actions_count: 1,
-        total_actions_count: 4,
-        closure_progress_percent: 25
-      });
-    }
-  };
+  const urgentActions = actions.filter(a => a.priority === 'critical' || a.priority === 'high');
 
   const formatINR = (val: number) => {
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Banner / Header */}
-      <div className="glass-card" style={{ padding: '1.5rem', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7))', borderLeft: '4px solid #38bdf8' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+      {/* Active Estate Case Card */}
+      <div className="neu-card" style={{ padding: '1.25rem 1.5rem', borderLeft: '5px solid var(--primary)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
-              <span className="badge-medium" style={{ padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600 }}>ACTIVE ESTATE CASE</span>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>ID: estate-case-1</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+              <span className="badge-medium" style={{ padding: '0.15rem 0.55rem', borderRadius: 'var(--radius-sm)', fontSize: '0.68rem', fontWeight: 700 }}>
+                ACTIVE CASE #101
+              </span>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                Executor: <strong style={{ color: 'var(--text-main)' }}>Rajesh Sharma</strong>
+              </span>
             </div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f8fafc' }}>
-              {summary?.title || 'Late Suresh Sharma Estate Closure'}
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+              Late Suresh Sharma Estate Closure
             </h2>
-            <p style={{ fontSize: '0.88rem', color: '#94a3b8', marginTop: '0.2rem' }}>
-              Deceased: <strong style={{ color: '#f8fafc' }}>{summary?.deceased_name || 'Suresh Sharma'}</strong> | Primary Executor: <span style={{ color: '#38bdf8' }}>Rajesh Sharma</span>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
+              Deceased: <strong style={{ color: 'var(--text-main)' }}>Suresh Sharma</strong> · Family Closure & Liquidation Plan
             </p>
           </div>
           <button 
             onClick={() => onNavigate('documents')}
-            style={{
-              padding: '0.6rem 1.1rem',
-              borderRadius: '10px',
-              border: 'none',
-              background: 'linear-gradient(135deg, #38bdf8, #0284c7)',
-              color: '#090d16',
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              boxShadow: '0 4px 12px rgba(56, 189, 248, 0.3)'
-            }}
+            className="neu-btn-primary"
           >
-            <FileText size={16} />
-            <span>Upload Documents (TEE Protected)</span>
+            <FileText size={15} />
+            <span>Upload Documents</span>
           </button>
         </div>
       </div>
 
       {/* Overview Stat Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
-        <div className="glass-card" style={{ padding: '1.25rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.82rem' }}>
-            <span>Total Extracted Assets</span>
-            <TrendingUp size={18} color="#10b981" />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.15rem' }}>
+        <div className="neu-card" style={{ padding: '1.15rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.74rem', fontWeight: 700 }}>
+            <span>EXTRACTED ASSETS</span>
+            <TrendingUp size={16} color="var(--success)" />
           </div>
-          <div style={{ fontSize: '1.6rem', fontWeight: 700, color: '#10b981', margin: '0.5rem 0 0.2rem 0' }}>
-            {formatINR(summary?.total_asset_value || 18345200.50)}
+          <div style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--success)', margin: '0.4rem 0 0.15rem 0', letterSpacing: '-0.02em' }}>
+            {formatINR(totalAssetValue)}
           </div>
-          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Bank accounts, insurance, property & investments</span>
+          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Bank, insurance, property & demat</span>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.25rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.82rem' }}>
-            <span>Total Outstanding Liabilities</span>
-            <AlertTriangle size={18} color="#f43f5e" />
+        <div className="neu-card" style={{ padding: '1.15rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.74rem', fontWeight: 700 }}>
+            <span>LIABILITIES & DEBT</span>
+            <AlertTriangle size={16} color="var(--danger)" />
           </div>
-          <div style={{ fontSize: '1.6rem', fontWeight: 700, color: '#f43f5e', margin: '0.5rem 0 0.2rem 0' }}>
-            {formatINR(summary?.total_liability_value || 4250000.00)}
+          <div style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--danger)', margin: '0.4rem 0 0.15rem 0', letterSpacing: '-0.02em' }}>
+            {formatINR(totalLiabilityValue)}
           </div>
-          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Home loan principal & ongoing EMI obligations</span>
+          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Home loan principal & card balances</span>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.25rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.82rem' }}>
-            <span>Net Estate Valuation</span>
-            <PieChart size={18} color="#38bdf8" />
+        <div className="neu-card" style={{ padding: '1.15rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.74rem', fontWeight: 700 }}>
+            <span>NET ESTATE VALUATION</span>
+            <PieChart size={16} color="var(--primary)" />
           </div>
-          <div style={{ fontSize: '1.6rem', fontWeight: 700, color: '#38bdf8', margin: '0.5rem 0 0.2rem 0' }}>
-            {formatINR(summary?.net_estate_value || 14095200.50)}
+          <div style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--primary)', margin: '0.4rem 0 0.15rem 0', letterSpacing: '-0.02em' }}>
+            {formatINR(netEstateValue)}
           </div>
-          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Estimated net distribution to beneficiaries</span>
+          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Net distribution for heirs</span>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.25rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.82rem' }}>
-            <span>Closure Plan Progress</span>
-            <CheckCircle size={18} color="#f59e0b" />
+        <div className="neu-card" style={{ padding: '1.15rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.74rem', fontWeight: 700 }}>
+            <span>CLOSURE PROGRESS</span>
+            <CheckCircle size={16} color="var(--warning)" />
           </div>
-          <div style={{ fontSize: '1.6rem', fontWeight: 700, color: '#f59e0b', margin: '0.5rem 0 0.2rem 0' }}>
-            {summary?.closure_progress_percent || 25}%
+          <div style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--warning)', margin: '0.4rem 0 0.15rem 0', letterSpacing: '-0.02em' }}>
+            {closureProgressPercent}%
           </div>
-          <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', marginTop: '0.5rem', overflow: 'hidden' }}>
-            <div style={{ width: `${summary?.closure_progress_percent || 25}%`, height: '100%', background: '#f59e0b' }} />
+          <div style={{
+            height: '7px',
+            background: 'var(--surface)',
+            borderRadius: 'var(--radius-full)',
+            marginTop: '0.4rem',
+            overflow: 'hidden',
+            boxShadow: 'var(--neu-shadow-inset)',
+            border: '1px solid rgba(255, 255, 255, 0.6)',
+            padding: '1px'
+          }}>
+            <div style={{
+              width: `${closureProgressPercent}%`,
+              height: '100%',
+              background: 'var(--warning)',
+              borderRadius: 'var(--radius-full)',
+              transition: 'width 0.4s ease'
+            }} />
           </div>
         </div>
       </div>
 
       {/* Unconfirmed Items Alert Banner */}
-      {summary?.unconfirmed_items_count ? (
-        <div className="glass-card" style={{ padding: '1rem 1.25rem', background: 'rgba(245, 158, 11, 0.12)', borderColor: 'rgba(245, 158, 11, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {unconfirmedCount > 0 && (
+        <div className="neu-card" style={{
+          padding: '0.9rem 1.25rem',
+          borderLeft: '4px solid var(--warning)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.75rem'
+        }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <AlertTriangle size={22} color="#f59e0b" />
+            <div style={{
+              width: '34px',
+              height: '34px',
+              borderRadius: 'var(--radius-md)',
+              background: '#fffbeb',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: 'var(--neu-shadow-btn)',
+              flexShrink: 0
+            }}>
+              <AlertTriangle size={18} color="var(--warning)" />
+            </div>
             <div>
-              <strong style={{ color: '#fcd34d', fontSize: '0.92rem' }}>Human Confirmation Required</strong>
-              <p style={{ fontSize: '0.8rem', color: '#cbd5e1' }}>
-                1 document extracted by TEE model contains low-confidence fields (LIC Term Policy Nominee). Confirm fields to promote into official estate inventory.
+              <strong style={{ color: 'var(--text-main)', fontSize: '0.85rem' }}>Human Verification Pending</strong>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
+                {unconfirmedCount} document extracted in TEE has low-confidence fields. Review to promote to inventory.
               </p>
             </div>
           </div>
           <button 
             onClick={() => onNavigate('documents')}
-            style={{
-              padding: '0.5rem 0.9rem',
-              borderRadius: '8px',
-              border: '1px solid rgba(245, 158, 11, 0.4)',
-              background: 'rgba(245, 158, 11, 0.2)',
-              color: '#fcd34d',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
+            className="neu-btn"
+            style={{ color: '#b45309', fontSize: '0.78rem' }}
           >
             Review Document
           </button>
         </div>
-      ) : null}
+      )}
 
       {/* Urgent Actions Section */}
-      <div className="glass-card" style={{ padding: '1.25rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#f8fafc' }}>
-            Urgent Closure Actions (Explainable Priority)
-          </h3>
+      <div className="neu-card" style={{ padding: '1.25rem 1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>
+              Urgent Closure Actions
+            </h3>
+            <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+              Prioritized by daily financial penalty risk and statutory claim deadlines
+            </p>
+          </div>
           <button 
             onClick={() => onNavigate('actions')}
-            style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem' }}
+            className="neu-btn"
+            style={{ color: 'var(--primary)', fontSize: '0.78rem' }}
           >
-            <span>View All Action Plan</span>
-            <ArrowRight size={14} />
+            <span>View All ({actions.length})</span>
+            <ArrowRight size={13} />
           </button>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
           {urgentActions.slice(0, 3).map((action) => (
             <div 
               key={action.id}
+              className="neu-card-sm"
               style={{
-                padding: '1rem',
-                borderRadius: '10px',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.06)',
+                padding: '0.95rem 1.15rem',
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '0.75rem'
               }}
             >
-              <div style={{ maxWidth: '75%' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.3rem' }}>
-                  <span className={`badge-${action.priority}`} style={{ padding: '0.15rem 0.5rem', borderRadius: '4px', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase' }}>
-                    {action.priority} Priority (Score: {action.urgency_score})
+              <div style={{ flex: '1 1 400px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
+                  <span className={`badge-${action.priority}`} style={{ padding: '0.1rem 0.45rem', borderRadius: 'var(--radius-sm)', fontSize: '0.66rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                    {action.priority} (Score: {action.urgency_score})
                   </span>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Due: {action.due_date}</span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>Due: {action.due_date}</span>
                 </div>
-                <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#f8fafc' }}>{action.title}</h4>
-                <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.25rem' }}>
-                  <strong style={{ color: '#cbd5e1' }}>Why Prioritized:</strong> {action.priority_reason}
-                </p>
+                <h4 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-main)' }}>{action.title}</h4>
+                <div className="neu-inset" style={{ padding: '0.4rem 0.65rem', marginTop: '0.35rem', fontSize: '0.75rem', color: 'var(--text-main)' }}>
+                  <strong style={{ color: 'var(--primary)' }}>Reason: </strong>
+                  {action.priority_reason}
+                </div>
               </div>
 
               <div>
                 <button
                   onClick={() => onNavigate('actions')}
-                  style={{
-                    padding: '0.45rem 0.85rem',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(56, 189, 248, 0.3)',
-                    background: 'rgba(56, 189, 248, 0.1)',
-                    color: '#38bdf8',
-                    fontSize: '0.78rem',
-                    fontWeight: 600,
-                    cursor: 'pointer'
-                  }}
+                  className="neu-btn"
+                  style={{ color: 'var(--primary)', fontSize: '0.78rem' }}
                 >
                   Manage Task
                 </button>
