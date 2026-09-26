@@ -6,7 +6,7 @@ import os
 from backend.app.core.config import settings
 from backend.app.core.database import Base, engine
 from backend.app.api import (
-    auth, vault, documents, extraction, estate, assets, liabilities, actions, family, audit
+    auth, vault, documents, extraction, estate, assets, liabilities, actions, family, audit, notifications, tasks
 )
 from database.seed.seed_demo_data import seed_db
 
@@ -49,6 +49,8 @@ app.include_router(liabilities.router, prefix=settings.API_V1_STR)
 app.include_router(actions.router, prefix=settings.API_V1_STR)
 app.include_router(family.router, prefix=settings.API_V1_STR)
 app.include_router(audit.router, prefix=settings.API_V1_STR)
+app.include_router(notifications.router, prefix=settings.API_V1_STR)
+app.include_router(tasks.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def root():
