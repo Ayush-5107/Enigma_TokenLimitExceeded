@@ -10,14 +10,14 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab, userPermissions, isOwner }) => {
   const navItems = [
-    { id: 'home', label: 'Home Dashboard', icon: Home, section: 'estate' },
-    { id: 'estate', label: 'Estate Inventory', icon: PieChart, section: 'estate' },
-    { id: 'vault', label: 'Legacy Vault', icon: FolderKey, section: 'vault' },
-    { id: 'documents', label: 'Documents & TEE', icon: FileText, section: 'documents' },
-    { id: 'actions', label: 'Action Engine', icon: CheckSquare, section: 'actions' },
-    { id: 'family', label: 'Family & Access', icon: Users, section: 'estate' },
-    { id: 'audit', label: 'Security & Audit', icon: ShieldAlert, section: 'audit' },
-    { id: 'settings', label: 'Settings & PWA', icon: Settings, section: 'estate' },
+    { id: 'home', label: 'Home Dashboard', icon: Home, permKey: null },
+    { id: 'estate', label: 'Estate Inventory', icon: PieChart, permKey: 'estate' },
+    { id: 'vault', label: 'Legacy Vault', icon: FolderKey, permKey: 'vault' },
+    { id: 'documents', label: 'Documents & TEE', icon: FileText, permKey: 'documents' },
+    { id: 'actions', label: 'Action Engine', icon: CheckSquare, permKey: 'actions' },
+    { id: 'family', label: 'Family & Access', icon: Users, permKey: null },
+    { id: 'audit', label: 'Security & Audit', icon: ShieldAlert, permKey: 'audit' },
+    { id: 'settings', label: 'Settings & PWA', icon: Settings, permKey: null },
   ];
 
   return (
@@ -46,7 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab, userP
 
       {navItems.map((item) => {
         const Icon = item.icon;
-        const isAllowed = isOwner || userPermissions[item.section] !== false;
+        const isAllowed = isOwner || !item.permKey || userPermissions[item.permKey] !== false;
         const isActive = currentTab === item.id;
 
         return (
