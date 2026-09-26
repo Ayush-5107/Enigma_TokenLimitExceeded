@@ -1,0 +1,17 @@
+{
+  "short_name": "Digital Estate",
+  "name": "Digital Estate & Financial Closure Assistant",
+  "description": "Privacy-first digital estate vault and financial closure assistant for families.",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#090d16",
+  "theme_color": "#38bdf8",
+  "display": "standalone",
+  "orientation": "portrait"
+}
