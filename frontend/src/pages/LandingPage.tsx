@@ -377,18 +377,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 68 }}>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div style={{
-              width: 36, height: 36, borderRadius: 'var(--radius-md)', background: 'var(--primary)',
+              width: 38, height: 38, borderRadius: 'var(--radius-md)', background: '#ffffff',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: 'var(--neu-shadow-primary)',
+              boxShadow: 'var(--neu-shadow-btn)', border: '1px solid rgba(255,255,255,0.9)',
+              overflow: 'hidden', padding: '2px'
             }}>
-              <Shield size={18} color="#fff" strokeWidth={2.5} />
+              <img src="/virasat-logo.png" alt="Virasat Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
-            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-0.04em' }}>
+            <span style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-0.04em' }}>
               VIRASAT
             </span>
-            <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginLeft: -2, marginTop: 8 }}>विरासत</span>
+            <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginLeft: 0, marginTop: 4 }}>विरासत</span>
           </div>
 
           {/* Desktop Nav */}
@@ -437,11 +438,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
             {/* Left: text */}
             <div style={{ animation: 'fadeSlideUp 0.8s ease both' }}>
-              {/* badge */}
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                <span className="badge-tee" style={{ padding: '0.3rem 0.85rem', borderRadius: 'var(--radius-full)', fontSize: '0.72rem', fontWeight: 700 }}>
-                  <span className="animate-tee-pulse" style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#006666', marginRight: 5 }} />
-                  TEE-SECURED · CONFIDENTIAL COMPUTING
+              {/* Main Logo & Badge Pill */}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                <div style={{
+                  width: 48, height: 48, borderRadius: 'var(--radius-md)', background: '#ffffff',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: 'var(--neu-shadow-btn)', border: '1px solid rgba(255,255,255,0.9)',
+                  overflow: 'hidden', padding: '3px'
+                }}>
+                  <img src="/virasat-logo.png" alt="Virasat Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                </div>
+                <span className="badge-tee" style={{ padding: '0.4rem 0.95rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 700 }}>
+                  <span className="animate-tee-pulse" style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: '#006666', marginRight: 6 }} />
+                  BANK-GRADE PRIVACY · ULTRA-SECURE VAULT
                 </span>
               </div>
 
@@ -459,7 +468,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               </h1>
 
               <p style={{ fontSize: '1.05rem', color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '2rem', maxWidth: 500 }}>
-                VIRASAT automates the estate closure journey for grieving families — from document extraction to financial settlement — protected by Trusted Execution Environments (TEE) and an explainable AI priority engine.
+                VIRASAT simplifies the estate closure journey for families — from smart document discovery to financial settlement — backed by bank-grade security and automated assistance.
               </p>
 
               {/* CTA row */}
@@ -477,9 +486,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               {/* Trust signals */}
               <div style={{ display: 'flex', gap: '1.5rem', marginTop: '2rem', flexWrap: 'wrap' }}>
                 {[
-                  { icon: <Lock size={14} color="var(--primary)" />, text: 'TEE Protected' },
-                  { icon: <CheckCircle size={14} color="var(--success)" />, text: 'DPDP Compliant' },
-                  { icon: <Globe size={14} color="var(--text-muted)" />, text: 'India-First' },
+                  { icon: <Lock size={14} color="var(--primary)" />, text: 'Bank-Grade Privacy' },
+                  { icon: <CheckCircle size={14} color="var(--success)" />, text: 'Legal Data Compliant' },
+                  { icon: <Globe size={14} color="var(--text-muted)" />, text: 'Built for Indian Families' },
                 ].map((item, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600 }}>
                     {item.icon} {item.text}

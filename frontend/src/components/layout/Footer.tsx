@@ -59,10 +59,10 @@ export const Footer: React.FC = () => {
           fontFamily: 'var(--font-mono)'
         }}>
           <Cpu size={11} color="var(--primary)" />
-          TEE Active
+          Vault Protected
         </span>
         <span style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-          DPDP Compliant
+          Privacy Protected
         </span>
       </div>
     </footer>

@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentUser, onSwitchUserRole, o
           letterSpacing: '-0.01em'
         }}>
           <Cpu size={14} className="animate-tee-pulse" color="var(--primary)" />
-          <span>TEE Enclave: Active (SGX Attested)</span>
+          <span>🔒 Bank-Grade Security Active</span>
         </div>
 
         {/* Demo Switch User Role Segmented Control */}

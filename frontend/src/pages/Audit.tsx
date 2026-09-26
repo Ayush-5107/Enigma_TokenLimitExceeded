@@ -13,7 +13,7 @@ export const Audit: React.FC = () => {
           <span>Security & Compliance Audit Trail</span>
         </h2>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-          Immutable tamper-evident record of vault decryptions, enclave extractions, and permission updates
+          Complete, tamper-evident record of document uploads, vault releases, and access updates
         </p>
       </div>
 
@@ -24,34 +24,34 @@ export const Audit: React.FC = () => {
         gap: '1.25rem'
       }}>
         <div className="neu-card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Total Audit Events</div>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Total Activity Logs</div>
           <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)', marginTop: '0.35rem' }}>{auditLogs.length}</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--success)', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-            <span>✓ Logged & Cryptographically Sealed</span>
+            <span>✓ Verified & Securely Recorded</span>
           </div>
         </div>
 
         <div className="neu-card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>TEE Enclave Integrity</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)', marginTop: '0.35rem' }}>100%</div>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Vault Security Status</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)', marginTop: '0.35rem' }}>Protected</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-            Hardware Attested (AMD SEV)
+            Hardware-Isolated Privacy
           </div>
         </div>
 
         <div className="neu-card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Zero-Knowledge Proofs</div>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Family Access Control</div>
           <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--success)', marginTop: '0.35rem' }}>Active</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-            Shamir Secret Key Shares
+            Multi-Member Authorization
           </div>
         </div>
 
         <div className="neu-card" style={{ padding: '1.25rem' }}>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>DPDP Compliance</div>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Privacy Protection</div>
           <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--primary)', marginTop: '0.35rem' }}>Verified</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-            Digital Personal Data Protection Act
+            Legal Data Privacy Compliant
           </div>
         </div>
       </div>

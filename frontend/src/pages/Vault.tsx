@@ -184,7 +184,7 @@ export const Vault: React.FC<VaultProps> = ({ isOwner }) => {
             <span>Secure Legacy Vault</span>
           </h2>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-            Zero-knowledge AES-256 encrypted storage with dead-man's-switch triggers
+            Private, end-to-end encrypted vault for critical account details and family instructions
           </p>
         </div>
         {isOwner && (
@@ -208,35 +208,35 @@ export const Vault: React.FC<VaultProps> = ({ isOwner }) => {
             </div>
             <div>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
-                Dead-Man's-Switch Safeguard
+                Emergency Family Access Release
               </h3>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-                Automated encrypted release trigger upon extended inactivity (30 days).
+                Automated access release for your family upon extended inactivity (30 days).
               </p>
             </div>
           </div>
-          <button className="neu-btn-primary" style={{ padding: '0.55rem 1.1rem', fontSize: '0.82rem' }} onClick={() => alert('Heartbeat confirmed! Timer reset.')}>
+          <button className="neu-btn-primary" style={{ padding: '0.55rem 1.1rem', fontSize: '0.82rem' }} onClick={() => alert('Heartbeat confirmed! Safety timer reset.')}>
             <RefreshCw size={15} />
-            <span>Confirm Heartbeat Now</span>
+            <span>Confirm Activity Now</span>
           </button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1.25rem' }}>
           <div className="neu-inset" style={{ padding: '0.85rem 1rem' }}>
-            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>LAST HEARTBEAT RECORDED</div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>LAST ACTIVITY RECORDED</div>
             <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--success)', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <ShieldCheck size={16} />
               <span>Today, {new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
             </div>
           </div>
           <div className="neu-inset" style={{ padding: '0.85rem 1rem' }}>
-            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>INACTIVITY TRIGGER WINDOW</div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>SAFETY RELEASE WINDOW</div>
             <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <Clock size={16} color="var(--primary)" />
               <span>30 Days Remaining</span>
             </div>
           </div>
           <div className="neu-inset" style={{ padding: '0.85rem 1rem' }}>
-            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>BENEFICIARY NOTIFICATION</div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>FAMILY BENEFICIARIES</div>
             <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--warning)', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <AlertTriangle size={16} />
               <span>2 Nominees Pre-Configured</span>
@@ -274,7 +274,7 @@ export const Vault: React.FC<VaultProps> = ({ isOwner }) => {
                     )}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginLeft: '0.25rem' }}>
                       <Lock size={13} color="var(--success)" />
-                      <span>AES-256</span>
+                      <span>Encrypted</span>
                     </div>
                   </div>
                 </div>
